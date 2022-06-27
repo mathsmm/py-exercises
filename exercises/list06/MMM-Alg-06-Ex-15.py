@@ -9,24 +9,47 @@ def precedence(operator: str):
     return -1
 
 def expression_to_token_list(expression: str):
-    token_list = []
-    token = ''
     expression = expression.replace(' ', '')
-
+    token_list = []
     additive_operator_list = ['+', '-']
-    diverse_list = ['*', '/', '^', '(' , ')']
 
-    i = 0
+    token = expression[0]
+    i = 1
     while i < len(expression):
         char = expression[i]
 
-        if char in additive_operator_list:
-            
+        def append_token(append_char: bool):
+            if append_char:
+                token_list.append(token)
+                token = ''
+                token_list.append(char)
+            else:
+                token_list.append(token)
+                token = ''
+
+        if char.isdigit():
+            token += char
+        elif char in additive_operator_list:
+            previous_char = expression[i - 1]
+            if previous_char == ')' or previous_char.isdigit() or previous_char == '':
+                append_token(False)
+                token += char
+            else:
+                append_token(True)
+        else:
+            append_token(True)
+
         i += 1
+    else:
+        token_list.append(token)
+
+
     return token_list
 
 def main():
-    pass
+    expression = '1 + 2 * 3 - 4 ^ (-4 * x)'
+    token_list = expression_to_token_list(expression)
+    print(token_list)
 
 if __name__ == "__main__":
     main()
