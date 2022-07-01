@@ -50,7 +50,10 @@ def format_bingo_dict_to_str(bingo_dict: dict):
             else:
                 result += f"{bingo_dict[key][i]}\t"
             j += 1
-        result += " |\n"
+        if len(str(bingo_dict[key][i])) == 1:
+            result += "  |\n"
+        else:
+            result += " |\n"
         i += 1
 
     result += "------------------------------------"
@@ -106,12 +109,28 @@ def return_all_valid_bingo_numbers():
 
 
 def main():
-    # bingo_dict = create_bingo_list()
-    # print(format_bingo_dict_to_str(bingo_dict))
-    bingo_dict = create_bingo_list()
-    bingo_numbers = return_all_valid_bingo_numbers()
-    rd.shuffle(bingo_numbers)
-    
+    quantity_of_simulations = int(input("Informe a quantidade de simulações: "))
+    sum = 0
+    for i in range(quantity_of_simulations):
+        bingo_dict = create_bingo_list()
+        bingo_numbers = return_all_valid_bingo_numbers()
+        rd.shuffle(bingo_numbers)
+        j = 0
+        while True:
+            key = bingo_numbers[j][:1]
+            value = int(bingo_numbers[j][1:])
+            if value in bingo_dict[key]:
+                index_of_value = bingo_dict[key].index(value)
+                bingo_dict[key][index_of_value] = 0
+                if verify_bingo_dict(bingo_dict):
+                    break
+
+            j += 1
+
+        sum += j
+
+    print(f"A média de chamadas para {quantity_of_simulations} partidas é: {sum / quantity_of_simulations}")
+
 
 if __name__ == "__main__":
     main()
