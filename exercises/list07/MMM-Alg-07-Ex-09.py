@@ -109,8 +109,19 @@ def return_all_valid_bingo_numbers():
 
 
 def main():
+    str = "Simulações de jogos de bingo.\n" + \
+          "Para cada simulação (partida de bingo), uma cartela de bingo e uma sequência " + \
+          "de números sorteados são gerados aleatoriamente. " + \
+          "O programa então verifica, a cada número sorteado, " + \
+          "se este está na cartela de bingo. " + \
+          "Ao completar uma coluna, linha ou diagonal da cartela com números " + \
+          "sorteados, o programa armazena a quantidade de chamadas " + \
+          "de números sorteados e executa a próxima simulação."
+    print(str)
     quantity_of_simulations = int(input("Informe a quantidade de simulações: "))
     sum = 0
+    min_calls = 75
+    max_calls = 0
     for i in range(quantity_of_simulations):
         bingo_dict = create_bingo_list()
         bingo_numbers = return_all_valid_bingo_numbers()
@@ -128,9 +139,17 @@ def main():
             j += 1
 
         sum += j
+        if j < min_calls:
+            min_calls = j
+        if j > max_calls:
+            max_calls = j
 
     print(f"A média de chamadas para {quantity_of_simulations} partidas é: {sum / quantity_of_simulations}")
-
+    print(f"O menor número de chamadas foi: {min_calls}")
+    print(f"O maior número de chamadas foi: {max_calls}")
+    print()
+    print("Última cartela:")
+    print(format_bingo_dict_to_str(bingo_dict))
 
 if __name__ == "__main__":
     main()
